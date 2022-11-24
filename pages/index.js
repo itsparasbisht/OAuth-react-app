@@ -1,8 +1,12 @@
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-export default function Home({ users }) {
+export default function Home({ users, failed }) {
   console.log(users);
+
+  if (failed) {
+    return <h1 style={{ textAlign: "center" }}>Failed to get the users</h1>;
+  }
 
   return (
     <div className={styles.container}>
@@ -39,7 +43,7 @@ export async function getStaticProps() {
   } catch (error) {
     return {
       props: {
-        users: [],
+        failed: true,
       },
     };
   }
