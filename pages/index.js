@@ -8,12 +8,35 @@ export default function Home({ articles }) {
     <div className={styles.container}>
       {articles.length > 0 &&
         articles.map((article, i) => (
-          <div key={i}>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "20px",
+              padding: "20px",
+            }}
+          >
             <img
-              src={article.urlToImage}
+              src={
+                article.urlToImage
+                  ? article.urlToImage
+                  : "https://www.inkling.com/wp-content/uploads/2021/06/SD-default-image.png"
+              }
               alt={article.description}
-              width={200}
+              width={400}
             />
+            <p
+              style={{
+                fontSize: "1.5rem",
+                textAlign: "center",
+                width: "400px",
+              }}
+            >
+              {article.title}
+            </p>
           </div>
         ))}
     </div>
