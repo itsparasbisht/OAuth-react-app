@@ -1,49 +1,23 @@
-import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 
-export default function Home({ articles }) {
-  console.log(articles);
-
-  const router = useRouter();
-  console.log(router);
+export default function Home({ users }) {
+  console.log(users);
 
   return (
     <div className={styles.container}>
-      {articles.length > 0 &&
-        articles.map((article, i) => (
-          <Link key={i} href={`/article/${article.title}`}>
+      {users.length > 0 &&
+        users.map((user) => (
+          <Link href={`/user/${user.id}`} key={user.id}>
             <div
               style={{
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
                 alignItems: "center",
-                marginTop: "20px",
-                padding: "20px",
-                cursor: "pointer",
+                marginTop: "10px",
               }}
             >
-              <img
-                src={
-                  article.urlToImage
-                    ? article.urlToImage
-                    : "https://www.inkling.com/wp-content/uploads/2021/06/SD-default-image.png"
-                }
-                alt={article.description}
-                width={400}
-              />
-              <p
-                style={{
-                  fontSize: "1.5rem",
-                  textAlign: "center",
-                  width: "400px",
-                }}
-              >
-                {article.title}
-              </p>
+              <h1>{user.name}</h1>
+              <h3 style={{ marginLeft: "20px" }}>username - {user.username}</h3>
             </div>
           </Link>
         ))}
@@ -52,24 +26,20 @@ export default function Home({ articles }) {
 }
 
 export async function getStaticProps() {
-  const apiKey = process.env.NEWS_API_KEY;
   try {
-    const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`
-    );
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users`);
 
-    const data = await response.json();
-    const articles = data.articles;
+    const users = await response.json();
 
     return {
       props: {
-        articles,
+        users,
       },
     };
   } catch (error) {
     return {
       props: {
-        articles: [],
+        users: [],
       },
     };
   }
