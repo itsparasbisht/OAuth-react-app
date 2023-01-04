@@ -1,34 +1,20 @@
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import { useEffect, useState } from "react";
-import styles from "../styles/Home.module.css";
+import { useSession, signIn, signOut } from "next-auth/react";
 
-export default function Home() {
-  const [token, setToken] = useState();
-
-  console.log(token);
-
-  useEffect(() => {
-    if (token) {
-      fetch(
-        `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`
-      ).then((res) => {
-        res.json().then((data) => {
-          console.log(data);
-        });
-      });
-    }
-  }, [token]);
-
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      setToken(tokenResponse.access_token);
-    },
-  });
-
+export default function Component() {
+  const { data: session } = useSession();
+  console.log(session);
+  if (session) {
+    return (
+      <>
+        Signed in as {session.user.email} <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
   return (
-    <div className={styles.container}>
-      <h1>Google SignIn</h1>
-      <button onClick={() => login()}>Log In</button>
-    </div>
+    <>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
+    </>
   );
 }
